@@ -1,0 +1,16 @@
+{
+  "name": "reconnect",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "server": "cd server && yarn dev",
+    "client": "cd client && yarn dev",
+    "dev": "concurrently \"yarn server\" \"yarn client\""
+  },
+  "repository": "https://github.com/afanfondu/reconnect.git",
+  "author": "Afan <afanfondu007@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^7.3.0"
+  }
+}
