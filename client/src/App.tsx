@@ -1,7 +1,7 @@
-import { useAuth, useSocket } from './hooks/store'
+import { useAuth, useSocket } from '@/hooks/store'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import { Fonts, Scrollbar } from './components/others'
-import { Home, Login } from './components/pages'
+import { Fonts, Scrollbar } from '@/components/ui'
+import { Home, Login } from '@/pages'
 import { useEffect } from 'react'
 
 function App() {
@@ -9,8 +9,8 @@ function App() {
 
   const setSocket = useSocket(state => state.setSocket)
 
-  useEffect(()=> {
-    if(!user) return
+  useEffect(() => {
+    if (!user) return
 
     setSocket(user._id)
   }, [user])
