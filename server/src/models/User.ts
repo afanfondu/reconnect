@@ -4,6 +4,7 @@ interface IUser {
   name: string
   email: string
   image: string
+  status: string
 }
 
 const User = mongoose.model<IUser>(
@@ -22,6 +23,10 @@ const User = mongoose.model<IUser>(
       image: {
         type: String,
         required: true
+      },
+      status: {
+        type: String,
+        default: 'online'
       }
     },
     { timestamps: true }
