@@ -6,14 +6,14 @@ import http from 'http'
 import './utils/connectDB'
 import { corsOptions } from './utils/corsOptions'
 import authRouter from './routes/auth'
-import SocketServer from './socket'
+import handleSocketServer from './socket'
 
 const PORT = process.env.PORT || 5000
 
 const app = express()
 const server = http.createServer(app)
 
-new SocketServer(server)
+handleSocketServer(server)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
