@@ -2,11 +2,12 @@ import api from '@/utils/api'
 import create from 'zustand'
 import { persist, devtools } from 'zustand/middleware'
 
-interface User {
+export interface User {
   _id: string
   name: string
   email: string
   image: string
+  status: string
 }
 
 interface State {
@@ -35,7 +36,8 @@ export const useAuth = create<State>()(
                 _id: res._id,
                 name: res.name,
                 email: res.email,
-                image: res.image
+                image: res.image,
+                status: res.status
               }
             })
           } catch (error) {

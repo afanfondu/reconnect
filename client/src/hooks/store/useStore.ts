@@ -1,5 +1,4 @@
 import create from 'zustand'
-import { devtools } from 'zustand/middleware'
 
 interface State {
   sidebarOpen: boolean
@@ -8,17 +7,15 @@ interface State {
   setSelectedContactIdx: (idx: number | null) => void
 }
 
-export const useStore = create<State>()(
-  devtools(set => ({
-    sidebarOpen: true,
-    selectedContactIdx: null,
+export const useStore = create<State>()(set => ({
+  sidebarOpen: true,
+  selectedContactIdx: null,
 
-    setSidebar: (isOpen: boolean) => {
-      set({ sidebarOpen: isOpen })
-    },
+  setSidebar: (isOpen: boolean) => {
+    set({ sidebarOpen: isOpen })
+  },
 
-    setSelectedContactIdx: (idx: number | null) => {
-      set({ selectedContactIdx: idx })
-    }
-  }))
-)
+  setSelectedContactIdx: (idx: number | null) => {
+    set({ selectedContactIdx: idx })
+  }
+}))

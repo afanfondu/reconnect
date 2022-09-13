@@ -1,4 +1,4 @@
-import { useStore } from '@/hooks/store'
+import { useContacts, useStore } from '@/hooks/store'
 import {
   Avatar,
   AvatarBadge,
@@ -16,6 +16,8 @@ const Contacts: React.FC = () => {
   const selectedContactIdx = useStore(state => state.selectedContactIdx)
   const setSelectedContactIdx = useStore(state => state.setSelectedContactIdx)
 
+  const contacts = useContacts(state => state.contacts)
+
   return (
     <Flex
       bg='primary.faint'
@@ -30,7 +32,7 @@ const Contacts: React.FC = () => {
         borderBottomRightRadius={selectedContactIdx === 0 ? '40px' : '0'}
       ></Box>
 
-      {[0, 1, 2, 3, 4].map((item, idx) => (
+      {contacts.map((contact, idx) => (
         <Flex
           key={idx}
           style={{ direction: 'ltr' }}
@@ -43,22 +45,44 @@ const Contacts: React.FC = () => {
           }
           bg={idx === selectedContactIdx ? 'primary.faint' : 'white'}
           borderBottomRightRadius={
-            selectedContactIdx != null && idx === selectedContactIdx - 1 ? '40px' : '0'
+            selectedContactIdx != null && idx === selectedContactIdx - 1
+              ? '40px'
+              : '0'
           }
-          borderTopRightRadius={selectedContactIdx != null && idx === selectedContactIdx + 1 ? '40px' : '0'}
+          borderTopRightRadius={
+            selectedContactIdx != null && idx === selectedContactIdx + 1
+              ? '40px'
+              : '0'
+          }
           onClick={() => {
             setSelectedContactIdx(idx)
             if (mobile) setSidebar(false)
           }}
         >
-          <Avatar mx='4' name='Itachi Uchiha' src='https://bit.ly/dan-abramov'>
-            <AvatarBadge boxSize='1.25em' bg='green.500' />
+          <Avatar
+            mx='4'
+            name={contact.recipient.name}
+            src={contact.recipient.image}
+          >
+            <AvatarBadge
+              boxSize='1.25em'
+              bg={
+                contact.recipient.status === 'online' ? 'green.500' : 'tomato'
+              }
+            />
           </Avatar>
           <Flex direction='column'>
             <Heading as='h6' size='sm'>
-              Itachi Uchiha
+              {contact.recipient.name}
             </Heading>
-            <Text color='gray'>3 new messages</Text>
+            {contact.newMessagesCount !== 0 ? (
+              <Text color='gray'>
+                {contact.newMessagesCount} new message
+                {contact.newMessagesCount > 1 && 's'}
+              </Text>
+            ) : (
+              <Text>{contact.recipient.email}</Text>
+            )}
           </Flex>
         </Flex>
       ))}
@@ -67,7 +91,9 @@ const Contacts: React.FC = () => {
         bg='white'
         minHeight='20px'
         flex='1'
-        borderTopRightRadius={selectedContactIdx === 4 ? '40px' : '0'}
+        borderTopRightRadius={
+          selectedContactIdx === contacts.length - 1 ? '40px' : '0'
+        }
       ></Box>
     </Flex>
   )

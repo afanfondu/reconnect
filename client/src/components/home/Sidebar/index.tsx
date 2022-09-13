@@ -21,6 +21,7 @@ import Contacts from './Contacts'
 export const Sidebar: React.FC = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const logout = useAuth(state => state.logout)
+  const user = useAuth(state => state.user)
 
   return (
     <>
@@ -34,7 +35,7 @@ export const Sidebar: React.FC = () => {
         </Text>
 
         <HStack px='4' w='full' my='4' justify='space-between'>
-          <Avatar name='Itachi Uchiha' src='https://bit.ly/dan-abramov' />
+          <Avatar name={user?.name} src={`${user?.image}`} />
 
           <Box>
             <Tooltip hasArrow label='Add Contact'>
