@@ -1,9 +1,10 @@
 import { Flex, Heading, IconButton, useMediaQuery } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 
-import { useSocket, useStore } from '@/hooks/store'
+import { useContacts, useSocket, useStore } from '@/hooks/store'
 import { Intro, Sidebar } from '@/components/home'
 import { ArrowLeftIcon } from '@chakra-ui/icons'
+import EVENTS from '@/utils/Events'
 
 export const Home: React.FC = () => {
   const [mobile] = useMediaQuery('(max-width: 48em)')
@@ -15,17 +16,20 @@ export const Home: React.FC = () => {
   const selectedContactIdx = useStore(state => state.selectedContactIdx)
   const setSelectedContactIdx = useStore(state => state.setSelectedContactIdx)
 
+  const setContacts = useContacts(state => state.setContacts)
+
   useEffect(() => {
     if (!socket) return
 
-    socket.on('get-hello', ({ message }: any) => {
-      console.log(message)
+    socket.on(EVENTS.SERVER.CONTACTS, contacts => {
+      console.log('getting contacts from server...', contacts)
+      setContacts(contacts)
     })
 
-    socket.emit('send-hello')
+    socket.emit(EVENTS.CLIENT.SEND_CONTACTS)
 
     return () => {
-      socket.off('get-hello')
+      socket.off(EVENTS.SERVER.CONTACTS)
     }
   }, [socket])
 

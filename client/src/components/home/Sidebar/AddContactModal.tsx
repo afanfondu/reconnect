@@ -1,3 +1,5 @@
+import { useContacts, useSocket } from '@/hooks/store'
+import EVENTS from '@/utils/Events'
 import {
   Button,
   Input,
@@ -7,9 +9,10 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay
+  ModalOverlay,
+  useToast
 } from '@chakra-ui/react'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 interface Props {
   isOpen: any
@@ -19,10 +22,12 @@ interface Props {
 const AddContactModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const initialRef = useRef<HTMLInputElement | null>(null)
 
-  const addContact = () => {
-    console.log('contact added -', initialRef.current?.value)
-    onClose()
-  }
+  const [email, setEmail] = useState('')
+
+  const socket = useSocket(state => state.socket)
+  const toast = useToast()
+
+  const addContact = useContacts(state => state.addContact)
 
   return (
     <>
@@ -32,15 +37,21 @@ const AddContactModal: React.FC<Props> = ({ isOpen, onClose }) => {
           <ModalHeader>Add New Contact</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <Input ref={initialRef} placeholder="Enter contact's email" />
+            <Input
+              ref={initialRef}
+              required
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="Enter contact's email"
+            />
           </ModalBody>
 
           <ModalFooter>
             <Button
-              type='submit'
-              onClick={addContact}
+              onClick={() => addContact(email, socket, toast, onClose)}
               colorScheme='blue'
               mr={3}
+              disabled={email === ''}
             >
               Add
             </Button>
