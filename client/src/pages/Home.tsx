@@ -5,6 +5,7 @@ import { useContacts, useSocket, useStore } from '@/hooks/store'
 import { Intro, Sidebar } from '@/components/home'
 import { ArrowLeftIcon } from '@chakra-ui/icons'
 import EVENTS from '@/utils/Events'
+import { ChatSection } from '@/components/home/ChatSection'
 
 export const Home: React.FC = () => {
   const [mobile] = useMediaQuery('(max-width: 48em)')
@@ -65,9 +66,7 @@ export const Home: React.FC = () => {
         {selectedContactIdx === null
           ? !mobile && <Intro />
           : ((mobile && !sidebarOpen) || (!mobile && sidebarOpen)) && (
-              <>
-                <Heading>Chat Section {selectedContactIdx}</Heading>
-              </>
+              <ChatSection />
             )}
       </Flex>
     </Flex>
