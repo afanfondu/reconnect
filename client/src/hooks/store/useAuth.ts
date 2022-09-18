@@ -53,6 +53,7 @@ export const useAuth = create<State>()(
 
         logout: () => {
           set({ user: null })
+          window.location.reload()
         }
       }),
       { name: 'reconnect-auth' }

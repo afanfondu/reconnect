@@ -35,7 +35,9 @@ export const Sidebar: React.FC = () => {
         </Text>
 
         <HStack px='4' w='full' my='4' justify='space-between'>
-          <Avatar name={user?.name} src={`${user?.image}`} />
+          <Tooltip label={`${user!.name} "${user!.email}"`}>
+            <Avatar name={user?.name} src={`${user?.image}`} />
+          </Tooltip>
 
           <Box>
             <Tooltip hasArrow label='Add Contact'>
