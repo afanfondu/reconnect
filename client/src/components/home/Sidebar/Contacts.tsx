@@ -1,4 +1,5 @@
-import { useContacts, useStore } from '@/hooks/store'
+import { useContacts, useMessages, useSocket, useStore } from '@/hooks/store'
+import EVENTS from '@/utils/Events'
 import {
   Avatar,
   AvatarBadge,
@@ -6,6 +7,7 @@ import {
   Flex,
   Heading,
   Text,
+  Tooltip,
   useMediaQuery
 } from '@chakra-ui/react'
 
@@ -18,6 +20,25 @@ const Contacts: React.FC = () => {
 
   const contacts = useContacts(state => state.contacts)
 
+  const socket = useSocket(state => state.socket)
+
+  const setNewMessagesCount = useMessages(state => state.setNewMessagesCount)
+
+  const onContactChange = (idx: number) => {
+    setSelectedContactIdx(idx)
+    setNewMessagesCount(contacts[idx].newMessagesCount)
+    if (!socket) return
+
+    socket.emit(
+      EVENTS.CLIENT.SEND_CONTACT_MESSAGES,
+      contacts[idx].recipient._id
+    )
+
+    socket.emit(EVENTS.CLIENT.SEEN_MESSAGES, contacts[idx]._id)
+
+    if (mobile) setSidebar(false)
+  }
+
   return (
     <Flex
       bg='primary.faint'
@@ -27,7 +48,7 @@ const Contacts: React.FC = () => {
       flexDirection='column'
     >
       <Box
-        minHeight='20px'
+        minHeight='40px'
         bg='white'
         borderBottomRightRadius={selectedContactIdx === 0 ? '40px' : '0'}
       ></Box>
@@ -54,34 +75,35 @@ const Contacts: React.FC = () => {
               ? '40px'
               : '0'
           }
-          onClick={() => {
-            setSelectedContactIdx(idx)
-            if (mobile) setSidebar(false)
-          }}
+          onClick={() => onContactChange(idx)}
         >
-          <Avatar
-            mx='4'
-            name={contact.recipient.name}
-            src={contact.recipient.image}
-          >
-            <AvatarBadge
-              boxSize='1.25em'
-              bg={
-                contact.recipient.status === 'online' ? 'green.500' : 'tomato'
-              }
-            />
-          </Avatar>
+          <Tooltip hasArrow label={contact.recipient.email}>
+            <Avatar
+              mx='4'
+              name={contact.recipient.name}
+              src={contact.recipient.image}
+            >
+              {contact.recipient.status === 'online' && (
+                <AvatarBadge
+                  boxSize='1em'
+                  bg='green.500'
+                  borderColor='green.100'
+                />
+              )}
+            </Avatar>
+          </Tooltip>
           <Flex direction='column'>
             <Heading as='h6' size='sm'>
               {contact.recipient.name}
             </Heading>
             {contact.newMessagesCount !== 0 ? (
-              <Text color='gray'>
-                {contact.newMessagesCount} new message
-                {contact.newMessagesCount > 1 && 's'}
+              <Text opacity='0.5'>
+                {contact.newMessagesCount > 1
+                  ? `${contact.newMessagesCount} new messages`
+                  : `${contact.newMessagesCount} new message`}
               </Text>
             ) : (
-              <Text>{contact.recipient.email}</Text>
+              <Text opacity='0.5'>{contact.recipient.email}</Text>
             )}
           </Flex>
         </Flex>

@@ -4,6 +4,7 @@ import create from 'zustand'
 import { User } from './useAuth'
 
 interface Contact {
+  _id: string
   user: string
   recipient: User
   newMessageDate: Date
