@@ -17,9 +17,9 @@ const ChatBody = () => {
 
   useEffect(() => {
     if (newMessagesCount !== 0 && newMessagesRef.current) {
-      newMessagesRef.current.scrollIntoView({ behavior: 'smooth' })
+      newMessagesRef.current.scrollIntoView({ behavior: 'auto' })
     } else if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ behavior: 'smooth' })
+      lastMessageRef.current.scrollIntoView({ behavior: 'auto' })
     }
   }, [messages, newMessagesCount])
 
