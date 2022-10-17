@@ -1,7 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.corsOptions = exports.allowedOrigins = void 0;
-exports.allowedOrigins = ['http://localhost:3000', 'http://localhost:5173'];
+exports.allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    `${process.env.CLIENT_URL}`
+];
 exports.corsOptions = {
     origin: (origin, callback) => {
         if (exports.allowedOrigins.indexOf(origin) !== -1 || !origin) {
