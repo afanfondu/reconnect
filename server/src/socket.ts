@@ -36,7 +36,6 @@ const handleSocketServer = (httpServer: HTTPServer) => {
     socket.join(userId)
     updateUserStatus(userId, 'online', io)
     sendContacts(userId, io)
-    console.log(userId, 'is online')
 
     socket.on(
       EVENTS.CLIENT.ADD_NEW_CONTACT,
@@ -137,7 +136,6 @@ const handleSocketServer = (httpServer: HTTPServer) => {
 
     socket.on(EVENTS.DISCONNECT, () => {
       updateUserStatus(userId, 'offline', io)
-      console.log(userId, 'is offline')
     })
   })
 }
